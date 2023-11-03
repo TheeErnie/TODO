@@ -5,4 +5,34 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+
+<div style="background-color: mintcream; width:25%; height: 100%; float:left;">
+    <!-- Right pane for todo list -->
+    <!-- Need to auto-populate list -->
+    <h2>//todo list</h2>
+    <ul id="todo_list" runat="server" class="TDTodo" style="width:100%; height:400px; overflow-y:scroll;">
+        @{
+            List<TDTodo> tdlist = new List<TDTodo>();   //auto genning some objects for testing
+            for (int i = 0; i < 30; i++)
+            {
+                var tmptd = new TDTodo();
+                tdlist.Add(tmptd);
+            }
+
+            if (tdlist.Count == 0)
+            {
+                <li>Nothing to do!</li>
+            } //display tdtodo object names in list
+            else
+            {
+                for (int i = 0; i < tdlist.Count; i++)
+                {
+                    <li>@tdlist[i].Name</li>
+                }
+            }
+        }
+    </ul>
+    <button style="width:80%" id="mybutt">Create Item</button>
+    <button style="width:80%">Edit   Item</button>
+    <button style="width:80%">Delete Item</button>
+</div>

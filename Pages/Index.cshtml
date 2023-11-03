@@ -35,20 +35,22 @@
                                 @{
                                     for(int j = 0; j < 7; j++)
                                     {
-                                        int day_of_month = i * 7 + j + 1 - start_of_month;                                        
-                                        if(day_of_month < 1)
-                                        {
-                                            if(DateTime.Now.Month == 1)     //filling dates from previous month
-                                            {
-                                                day_of_month = DateTime.DaysInMonth(DateTime.Now.Year - 1, 12) - start_of_month + j + 1;
-                                            } else
-                                            {
-                                                day_of_month = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month - 1) - start_of_month + j + 1;
-                                            }
-                                        }
-                                        if(day_of_month > DateTime.DaysInMonth(DateTime.Now.Year,DateTime.Now.Month))
+                                        int day_of_month = i * 7 + j + 1 - start_of_month;
+
+                                        if (day_of_month > DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month))
                                         {
                                             day_of_month = day_of_month - DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                                        }
+                                        if(day_of_month < 1)
+                                        {
+                                            if (DateTime.Now.Month == 1)
+                                            {
+                                                day_of_month += 31;
+                                            }
+                                            else
+                                            {
+                                                day_of_month += DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month - 1);
+                                            }
                                         }
                                         <td>@day_of_month</td>
                                     }
@@ -72,7 +74,7 @@
 
                             for(int i = 0; i < tdes.Count; i++)
                             {
-                                                                <li style="text-align:left;">@tdes[i].StartTimeString - @tdes[i].Name</li>
+                                <li style="text-align:left;">@tdes[i].StartTimeString - @tdes[i].Name</li>
                             }
                         }
                     </ul>

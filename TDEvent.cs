@@ -6,7 +6,6 @@
         private DateTime _start_time;
         private DateTime _end_time;
         private string _name;
-        private string _description;
         private bool _completed;
 
         //constructor
@@ -15,16 +14,14 @@
             _start_time = DateTime.Today; 
             _end_time = DateTime.Today;
             _name = "NO_NAME_GIVEN";
-            _description = string.Empty;
             _completed = false;
         }
 
-        public TDEvent(DateTime start_time, DateTime end_time, string name, string description)
+        public TDEvent(DateTime start_time, DateTime end_time, string name)
         {
             _start_time=start_time;
             _end_time=end_time;
             _name=name;
-            _description=description;
             _completed = false;
         }
 

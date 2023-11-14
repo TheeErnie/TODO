@@ -1,6 +1,13 @@
 ﻿namespace TODO
 {
-    public class TDEvent
+    public interface IEvent
+    {
+        DateTime StartTime { get; set; }
+        DateTime EndTime { get; set; }
+        string Name { get; set; }
+        string Description { get; set; }
+    }
+    public class TDEvent : IEvent
     {
         //attributes
         private DateTime _start_time;
@@ -30,13 +37,31 @@
         {
             get { return _start_time.ToString("h:mm tt"); }
         }
-        public string Name
+        public string EventName
         {
             get { return _name; }
             set { _name = value; }
         }
 
+        //interface
+        public DateTime StartTime { 
+            get { return _start_time; } 
+            set { _start_time = value; } 
+        }
+        public DateTime EndTime
+        {
+            get { return _end_time; }
+            set { _end_time = value; }
+        }
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+        public string Description { get; set; }
+
         //methods
+
         public void UpdateAvailability()
         {
 

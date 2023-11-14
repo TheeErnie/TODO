@@ -6,16 +6,69 @@
 
 <script runat="server">
     void Page_Load(Object sender, EventArgs e) {
-        
+
     }
- </script>
+</script>
+
+@{
+    //global listing of events
+    //take out of hardcode
+    List<IEvent> eventsList = new List<IEvent>();
+    DateTime today = new DateTime(2023, 11, 13, 1, 0, 0);
+
+
+    var tmpdate = new TDEvent(today.AddMinutes(540), today.AddMinutes(590), "CSC 410");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(600), today.AddMinutes(650), "MATH 316");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(780), today.AddMinutes(830), "MATH 437");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(1080), today.AddMinutes(1200), "MasterSingers");
+    eventsList.Add(tmpdate);
+    
+    //tuesday
+    today = new DateTime(2023, 11, 14, 8, 0, 0);
+    tmpdate = new TDEvent(today.AddMinutes(30), today.AddMinutes(90), "TEALS");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(90), today.AddMinutes(165), "CIS 332");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(180), today.AddMinutes(255), "CSC 461");
+    eventsList.Add(tmpdate);
+
+    //wednesday
+    today = new DateTime(2023, 11, 15, 8, 0, 0);
+    tmpdate = new TDEvent(today.AddMinutes(30), today.AddMinutes(90), "TEALS");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(120), today.AddMinutes(170), "CSC 410");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(180), today.AddMinutes(230), "MATH 316");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(360), today.AddMinutes(410), "MATH 437");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(540), today.AddMinutes(959), "On Duty");
+    eventsList.Add(tmpdate);
+    
+    //thursday
+    today = new DateTime(2023, 11, 16, 8, 0, 0);
+    tmpdate = new TDEvent(today.AddMinutes(30), today.AddMinutes(90), "TEALS");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(90), today.AddMinutes(165), "CIS 332");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(180), today.AddMinutes(255), "CSC 461");
+    eventsList.Add(tmpdate);
+    tmpdate = new TDEvent(today.AddMinutes(600), today.AddMinutes(630), "RA Meeting");
+    eventsList.Add(tmpdate);
+
+}
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <div style="width: 100%; height: 750px;">
 
-        <div style="width: 75%; height: 100%; float:left;">                                       <!-- Left pane for calendars -->
-            <div style="background-color: hotpink; width: 100%; height: 70%; float:left;">      <!-- Top left for month cal -->
+        <div style="width: 75%; height: 100%; float:left;">
+            <!-- Left pane for calendars -->
+            <div style="background-color: hotpink; width: 100%; height: 70%; float:left;">
+                <!-- Top left for month cal -->
                 <!-- Need to auto-populate month & dates -->
                 @{
                     string[] tdmonths = { "Januray", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
@@ -24,16 +77,17 @@
                 <table style="width:100%;height:10%">
                     <tr> <td>Sunday</td> <td>Monday</td> <td>Tuesday</td> <td>Wednesday</td> <td>Thursday</td> <td>Friday</td> <td>Saturday</td> </tr>
                 </table>
-                <table style="width: 100%; height: 80%">
+                <table style="width: 100%; height: 80%;" border="0">
                     <!-- Make nested for loops for displaying days -->
                     @{
+                        IEnumerable<IEvent> eventsThisMonth = eventsList.Where(myevent => myevent.StartTime.Date.Month == DateTime.Now.Month);
                         DateTime dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                         int start_of_month = (int)dt.DayOfWeek;
-                        for(int i = 0; i < 5; i++)
+                        for (int i = 0; i < 5; i++)
                         {
                             <tr>
                                 @{
-                                    for(int j = 0; j < 7; j++)
+                                    for (int j = 0; j < 7; j++)
                                     {
                                         int day_of_month = i * 7 + j + 1 - start_of_month;
 
@@ -41,7 +95,7 @@
                                         {
                                             day_of_month = day_of_month - DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
                                         }
-                                        if(day_of_month < 1)
+                                        if (day_of_month < 1)
                                         {
                                             if (DateTime.Now.Month == 1)
                                             {
@@ -51,30 +105,38 @@
                                             {
                                                 day_of_month += DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month - 1);
                                             }
-                                        }
-                                        <td>@day_of_month</td>
+                                        }                                        
+                                        IEnumerable<IEvent> eventsThisDate = eventsThisMonth.Where(thisevent => thisevent.StartTime.Date.Day == day_of_month);
+
+                                        //displaying date and events
+                                        <td>
+                                            <h1 style="text-align:left;font-size:14px;">@day_of_month</h1>
+                                            <ul>
+                                                @{
+                                                    foreach(IEvent eve in eventsThisDate)
+                                                    {
+                                                        <li style="text-align:left;font-size:10px">@eve.Name</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </td>
                                     }
                                 }
                             </tr>
                         }
-                    }                    
+                    }
                 </table>
             </div>                                                                                  <!-- Bottom left for day cal -->
             <div style="background-color: green; width: 100%; height: 30%; float:left;">
                 <div style="background-color: green; width:75%; height:100%; float:left">
-                    day planner for @DateTime.Now.ToShortDateString()
+                    Today's Events : @DateTime.Now.ToShortDateString()
                     <ul style="width:100%;height:80%;overflow-y:scroll">
                         @{
-                            List<TDEvent> tdes = new List<TDEvent>();
-                            for(int i = 0; i < 15; i++)
+                            //fill in listing of today's events
+                            IEnumerable<IEvent> eventsToday = eventsList.Where(myevent => myevent.StartTime.Date.Month == DateTime.Now.Month && myevent.StartTime.Date.Day == DateTime.Now.Day);
+                            foreach (IEvent eve in eventsToday)
                             {
-                                var tmptd = new TDEvent();          // need to make constructors protected when updating this
-                                tdes.Add(tmptd);
-                            }
-
-                            for(int i = 0; i < tdes.Count; i++)
-                            {
-                                <li style="text-align:left;">@tdes[i].StartTimeString - @tdes[i].Name</li>
+                                <li style="text-align:left;">@eve.StartTime.ToString("HH:mm tt") - @eve.Name</li>
                             }
                         }
                     </ul>
@@ -88,7 +150,8 @@
             </div>
         </div>
 
-        <div style="background-color: mintcream; width:25%; height: 100%; float:left;">           <!-- Right pane for todo list -->
+        <div style="background-color: mintcream; width:25%; height: 100%; float:left;">
+            <!-- Right pane for todo list -->
             <!-- Need to auto-populate list -->
             <h2>//todo list</h2>
             <ul id="todo_list" runat="server" class="TDTodo" style="width:100%; height:80%; overflow-y:scroll;">
@@ -100,15 +163,19 @@
                         tdlist.Add(tmptd);
                     }
 
-                    if(tdlist.Count == 0) { <li>Nothing to do!</li> } //display tdtodo object names in list
-                    else {
-                        for(int i = 0; i < tdlist.Count; i++)
+                    if (tdlist.Count == 0)
+                    {
+                        <li>Nothing to do!</li>
+                    } //display tdtodo object names in list
+                    else
+                    {
+                        for (int i = 0; i < tdlist.Count; i++)
                         {
                             <li>@tdlist[i].Name</li>
                         }
                     }
-                }                
-            </ul>           
+                }
+            </ul>
             <button style="width:80%" id="mybutt">Create Item</button>
             <button style="width:80%">Edit   Item</button>
             <button style="width:80%">Delete Item</button>
